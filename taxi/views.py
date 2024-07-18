@@ -99,7 +99,7 @@ def car_assign_driver(request: HttpRequest, pk: int) -> HttpResponse:
 
 
 def car_delete_driver(request: HttpRequest, pk: int) -> HttpResponse:
-    car = Car.objects.get(id=pk)
+    car = Car.objects.get_object_or_404(Car, id=pk)
     car.drivers.remove(request.user)
     context = {
         "car": car
@@ -114,7 +114,7 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
 class DriverDetailView(LoginRequiredMixin, generic.DetailView):
     model = Driver
-    queryset = Driver.objects.all().prefetch_related("cars__manufacturer")
+    queryset = Driver.objects.prefetch_related("cars__manufacturer")
 
 
 class DriverCreationView(LoginRequiredMixin, generic.CreateView):
